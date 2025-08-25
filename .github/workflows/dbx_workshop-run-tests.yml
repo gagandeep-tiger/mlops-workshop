@@ -11,14 +11,8 @@ defaults:
     working-directory: ./dbx_workshop/
 
 env:
-  DATABRICKS_HOST: https://adb-3605952270900347.7.azuredatabricks.net
   DATABRICKS_CLIENT_ID: ${{ secrets.STAGING_AZURE_SP_APPLICATION_ID }}
   DATABRICKS_CLIENT_SECRET: ${{ secrets.STAGING_AZURE_SP_CLIENT_SECRET }}
-  # DATABRICKS_TOKEN: ${{ secrets.STAGING_DATABRICKS_TOKEN }}
-  # ARM_TENANT_ID: ${{ secrets.STAGING_AZURE_SP_TENANT_ID }}
-  # ARM_CLIENT_ID: ${{ secrets.STAGING_AZURE_SP_APPLICATION_ID }}
-  # ARM_CLIENT_SECRET: ${{ secrets.STAGING_AZURE_SP_CLIENT_SECRET }}
-  
 
 concurrency: dbx_workshop-feature-training-integration-test-staging
 
