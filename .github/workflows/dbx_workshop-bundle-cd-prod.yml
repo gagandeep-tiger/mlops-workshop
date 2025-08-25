@@ -15,9 +15,8 @@ defaults:
     working-directory: ./dbx_workshop
 
 env:
-  ARM_TENANT_ID: ${{ secrets.PROD_AZURE_SP_TENANT_ID }}
-  ARM_CLIENT_ID: ${{ secrets.PROD_AZURE_SP_APPLICATION_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.PROD_AZURE_SP_CLIENT_SECRET }}
+  DATABRICKS_CLIENT_SECRET: ${{ secrets.PROD_AZURE_SP_CLIENT_SECRET }}
+  DATABRICKS_CLIENT_ID: ${{ secrets.PROD_AZURE_SP_APPLICATION_ID }}
   
 
 jobs:
