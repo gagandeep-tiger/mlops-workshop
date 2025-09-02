@@ -5,7 +5,7 @@ You should plug in your own features computation logic in the compute_features_f
 import pyspark.sql.functions as F
 
 
-def compute_features_fn(pickup_feature, dropoff_feature):
+def compute_features_fn(pickup_feature, dropoff_feature, timestamp_column):
     """Contains logic to compute features.
 
     Given an input dataframe and time ranges, this function should compute features, populate an output dataframe and
@@ -33,6 +33,10 @@ def compute_features_fn(pickup_feature, dropoff_feature):
             F.col("count_trips_window_1h_pickup_zip").isNotNull() & F.col("count_trips_window_30m_dropoff_zip").isNotNull(),
             F.lit(1)
         ).otherwise(F.lit(0))
-    ).select("zip","local_trip") 
+    ).select(
+            F.col("tpep_pickup_datetime").alias(timestamp_column),
+            F.col("zip"),
+            F.col("local_trip")
+        )
 
     return df_localtrip

@@ -127,6 +127,7 @@ if features_module == "localtrip_features":
     features_df = compute_features_fn(
     pickup_feature=pickup_feature,
     dropoff_feature=dropoff_feature,
+    timestamp_column=ts_column,
 )
 else:
     features_df = compute_features_fn(

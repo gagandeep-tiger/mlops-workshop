@@ -206,7 +206,7 @@ localtrip_feature_lookups = [
         table_name=localtrip_features_table,
         feature_names=["local_trip"],
         lookup_key=["dropoff_zip"],
-        # timestamp_lookup_key=["rounded_dropoff_datetime"],
+        timestamp_lookup_key=["rounded_pickup_datetime"],
     ),
 ]
 
