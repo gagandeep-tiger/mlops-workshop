@@ -32,6 +32,20 @@ dbutils.widgets.text(
     "/databricks-datasets/nyctaxi-with-zipcodes/subsampled",
     label="Input Table Name",
 )
+# TODO: add descp
+# Pickup features table name
+dbutils.widgets.text(
+    "pickup_features_table",
+    "dev.dbx_workshop.trip_pickup_features",
+    label="Pickup Features Table",
+)
+
+# Dropoff features table name
+dbutils.widgets.text(
+    "dropoff_features_table",
+    "dev.dbx_workshop.trip_dropoff_features",
+    label="Dropoff Features Table",
+)
 # Input start date.
 dbutils.widgets.text("input_start_date", "", label="Input Start Date")
 # Input end date.
@@ -103,12 +117,22 @@ from importlib import import_module
 mod = import_module(features_module)
 compute_features_fn = getattr(mod, "compute_features_fn")
 
-features_df = compute_features_fn(
-    input_df=raw_data,
-    timestamp_column=ts_column,
-    start_date=input_start_date,
-    end_date=input_end_date,
+if features_module == "localtrip_features":
+
+    pickup_feature = spark.sql("select * from {pickup_features_table}")
+    dropoff_feature = spark.sql("select * from {dropoff_features_table}")
+
+    features_df = compute_features_fn(
+    pickup_feature=pickup_feature,
+    dropoff_feature=dropoff_feature,
 )
+else:
+    features_df = compute_features_fn(
+        input_df=raw_data,
+        timestamp_column=ts_column,
+        start_date=input_start_date,
+        end_date=input_end_date,
+    )
 
 # COMMAND ----------
 

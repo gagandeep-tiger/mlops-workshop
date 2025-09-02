@@ -32,6 +32,7 @@ resources:
               model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
               pickup_features_table: ${var.catalog_name}.dbx_workshop.trip_pickup_features
               dropoff_features_table: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
+              localtrip_features_table: ${var.catalog_name}.dbx_workshop.trip_localtrip_features
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
         - task_key: ModelValidation
