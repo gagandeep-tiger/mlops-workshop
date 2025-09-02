@@ -146,12 +146,20 @@ fe = FeatureEngineeringClient()
 
 # Create the feature table if it does not exist first.
 # Note that this is a no-op if a table with the same name and schema already exists.
-fe.create_table(
-    name=output_table_name,    
-    primary_keys=[x.strip() for x in pk_columns.split(",")] + [ts_column],  # Include timeseries column in primary_keys
-    timestamp_keys=[ts_column],
-    df=features_df,
-)
+if features_module == "localtrip_features":
+    fe.create_table(
+        name=output_table_name,    
+        primary_keys=[x.strip() for x in pk_columns.split(",")],  # Include timeseries column in primary_keys
+        timestamp_keys=[ts_column],
+        df=features_df,
+    )
+else:
+    fe.create_table(
+        name=output_table_name,    
+        primary_keys=[x.strip() for x in pk_columns.split(",")] + [ts_column],  # Include timeseries column in primary_keys
+        timestamp_keys=[ts_column],
+        df=features_df,
+    )
 
 # Write the computed features dataframe.
 fe.write_table(
