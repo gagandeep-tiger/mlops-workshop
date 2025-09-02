@@ -150,7 +150,7 @@ if features_module == "localtrip_features":
     fe.create_table(
         name=output_table_name,    
         primary_keys=[x.strip() for x in pk_columns.split(",")],  # Include timeseries column in primary_keys
-        timestamp_keys=[ts_column],
+        # timestamp_keys=[ts_column],
         df=features_df,
     )
 else:
