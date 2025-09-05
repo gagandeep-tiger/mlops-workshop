@@ -119,23 +119,12 @@ from importlib import import_module
 mod = import_module(features_module)
 compute_features_fn = getattr(mod, "compute_features_fn")
 
-if features_module == "localtrip_features":
-
-    pickup_feature = spark.sql(f"select * from {pickup_features_table}")
-    dropoff_feature = spark.sql(f"select * from {dropoff_features_table}")
-
-    features_df = compute_features_fn(
-    pickup_feature=pickup_feature,
-    dropoff_feature=dropoff_feature,
+features_df = compute_features_fn(
+    input_df=raw_data,
     timestamp_column=ts_column,
+    start_date=input_start_date,
+    end_date=input_end_date,
 )
-else:
-    features_df = compute_features_fn(
-        input_df=raw_data,
-        timestamp_column=ts_column,
-        start_date=input_start_date,
-        end_date=input_end_date,
-    )
 
 # COMMAND ----------
 
@@ -146,20 +135,12 @@ fe = FeatureEngineeringClient()
 
 # Create the feature table if it does not exist first.
 # Note that this is a no-op if a table with the same name and schema already exists.
-if features_module == "localtrip_features":
-    fe.create_table(
-        name=output_table_name,    
-        primary_keys=[x.strip() for x in pk_columns.split(",")],  # Include timeseries column in primary_keys
-        timestamp_keys=[ts_column],
-        df=features_df,
-    )
-else:
-    fe.create_table(
-        name=output_table_name,    
-        primary_keys=[x.strip() for x in pk_columns.split(",")] + [ts_column],  # Include timeseries column in primary_keys
-        timestamp_keys=[ts_column],
-        df=features_df,
-    )
+fe.create_table(
+    name=output_table_name,    
+    primary_keys=[x.strip() for x in pk_columns.split(",")] + [ts_column],  # Include timeseries column in primary_keys
+    timestamp_keys=[ts_column],
+    df=features_df,
+)
 
 # Write the computed features dataframe.
 fe.write_table(
