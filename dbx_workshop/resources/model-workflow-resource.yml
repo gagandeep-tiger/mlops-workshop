@@ -1,7 +1,7 @@
 new_cluster: &new_cluster
   new_cluster:
     num_workers: 1
-    spark_version: 16.4.x-scala2.12
+    spark_version: 15.3.x-cpu-ml-scala2.12
     node_type_id: Standard_D3_v2
     data_security_mode: "SINGLE_USER"
     custom_tags:
