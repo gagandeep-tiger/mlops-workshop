@@ -59,4 +59,5 @@ def compute_features_fn(input_df, timestamp_column, start_date, end_date):
             _partition_id(F.to_timestamp(F.col("window.end"))).alias("yyyy_mm"),
         )
     )
+    pickupzip_features = pickupzip_features.dropDuplicates(subset=["zip", "tpep_pickup_datetime"])
     return pickupzip_features
