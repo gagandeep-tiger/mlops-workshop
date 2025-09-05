@@ -42,22 +42,21 @@ def compute_features_fn(input_df, timestamp_column, start_date, end_date):
     :return: Output dataframe containing computed features given the input arguments.
     """
     df = _filter_df_by_ts(input_df, timestamp_column, start_date, end_date)
+    df = df.withColumn("local_trip", (F.col("pickup_zip") == F.col("dropoff_zip")).cast(IntegerType()))
     pickupzip_features = (
         df.groupBy(
-            "pickup_zip", "dropoff_zip", F.window(timestamp_column, "1 hour", "15 minutes")
+            "pickup_zip", "local_trip", F.window(timestamp_column, "1 hour", "15 minutes")
         )  # 1 hour window, sliding every 15 minutes
         .agg(
             F.count("*").alias("count_trips_window_1h_pickup_zip"),
         )
         .select(
             F.col("pickup_zip").alias("zip"),
+            F.col("local_trip"),
             F.unix_timestamp(F.col("window.end"))
             .alias(timestamp_column)
             .cast(TimestampType()),
             _partition_id(F.to_timestamp(F.col("window.end"))).alias("yyyy_mm"),
-            F.when(F.col("dropoff_zip") == F.col("pickup_zip"), 1)
-            .otherwise(0)
-            .alias("local_trip")
         )
     )
     return pickupzip_features
