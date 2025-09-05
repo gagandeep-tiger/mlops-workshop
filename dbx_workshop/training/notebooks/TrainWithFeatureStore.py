@@ -231,7 +231,7 @@ fe = FeatureEngineeringClient()
 # Create the training set that includes the raw input data merged with corresponding features from both feature tables
 training_set = fe.create_training_set(
     df=taxi_data, # specify the df 
-    feature_lookups=pickup_feature_lookups + dropoff_feature_lookups + localtrip_features_table, 
+    feature_lookups=pickup_feature_lookups + dropoff_feature_lookups + localtrip_feature_lookups, 
     # both features need to be available; defined in GenerateAndWriteFeatures &/or feature-engineering-workflow-resource.yml
     label="fare_amount",
     exclude_columns=exclude_columns,
