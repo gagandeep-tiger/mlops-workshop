@@ -23,8 +23,6 @@ resources:
         # TODO: Create a task for training the model
         - task_key: ModelValidation
           job_cluster_key: model_training_job_cluster
-          depends_on:
-            - task_key: Train
           notebook_task:
             notebook_path: ../validation/notebooks/ModelValidation.py
             base_parameters:
