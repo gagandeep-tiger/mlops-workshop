@@ -33,7 +33,7 @@ dbutils.widgets.text(
     label="Input Table Name",
 )
 # Publish to online store
-dbutils.widgets.dropdown("publish_to_online_store", "true", ["true", "false"], Label = "Define if you want to enable feature store publication to online store")
+dbutils.widgets.dropdown("publish_to_online_store", "true", ["true", "false"], label = "Define if you want to enable feature store publication to online store")
 
 # Online store name
 dbutils.widgets.text("online_store_name", "", label="Input online_store_name")
