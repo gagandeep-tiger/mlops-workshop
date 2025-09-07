@@ -88,7 +88,7 @@ ts_column = dbutils.widgets.get("timestamp_column")
 features_module = dbutils.widgets.get("features_transform_module")
 pk_columns = dbutils.widgets.get("primary_keys")
 publish_to_online_store = dbutils.widgets.get("publish_to_online_store")
-
+online_store_name = dbutils.widgets.get("online_store_name")
 assert input_table_path != "", "input_table_path notebook parameter must be specified"
 assert output_table_name != "", "output_table_name notebook parameter must be specified"
 
