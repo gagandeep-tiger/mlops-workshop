@@ -40,7 +40,6 @@ sys.path.append("../..")
 
 from deploy import deploy
 
-model_uri = dbutils.jobs.taskValues.get("Train", "model_uri", debugValue="")
 env = dbutils.widgets.get("env")
 assert env != "None", "env notebook parameter must be specified"
 assert model_uri != "", "model_uri notebook parameter must be specified"
