@@ -148,14 +148,14 @@ fe.write_table(
 # Create Online Feature Store
 # Get information about an existing online store
 if publish_to_online_store == "true":
-    store = fe.get_online_store(name={online_store_name})
+    store = fe.get_online_store(name=online_store_name)
     if store:
         print(f"Store: {store.name}, State: {store.state}, Capacity: {store.capacity}")
     else:
         print("No store found, creating a new one")
         fe = FeatureEngineeringClient()
         fe.create_online_store(
-            name={online_store_name},
+            name=online_store_name,
             capacity="CU_1"
         )
 
