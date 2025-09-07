@@ -96,6 +96,7 @@ resources:
             notebook_path: ../deployment/model_deployment/notebooks/ModelServing.py
             base_parameters:
               env: ${bundle.target}
+              serve_model: "true"
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
               endpoint_name: predictions

@@ -31,6 +31,20 @@ dbutils.widgets.text("model_name", "dev.dbx_workshop.dbx_workshop-model", label=
 dbutils.widgets.dropdown("workload_size", "Small", ["Small", "Medium", "Large"], "Input workload_size")
 dbutils.widgets.text("workload_type", "CPU", label="Input workload_type")
 dbutils.widgets.text("scale_to_zero_enabled", "", label="Enable Scale to zero")
+dbutils.widgets.text("serve_model", "", label="Do you want to serve model?")
+
+# COMMAND ----------
+
+run_mode = dbutils.widgets.get("serve_model").lower()
+assert run_mode == "false" or run_mode == "true"
+
+if run_mode == "false":
+    print(
+        "Model Serving is in DISABLED mode. Exit model serving without blocking"
+    )
+    dbutils.notebook.exit(0)
+
+
 
 # COMMAND ----------
 
