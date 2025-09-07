@@ -64,8 +64,6 @@ resources:
           notebook_task:
             notebook_path: ../feature_engineering/notebooks/GenerateAndWriteFeatures.py
             base_parameters:
-              pickup_features_table: ${var.catalog_name}.dbx_workshop.trip_pickup_features
-              dropoff_features_table: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
               # TODO: modify these arguments to reflect your setup.
               input_table_path: /databricks-datasets/nyctaxi-with-zipcodes/subsampled
               # TODO: Empty start/end dates will process the whole range. Update this as needed to process recent data.

@@ -83,8 +83,6 @@ input_end_date = dbutils.widgets.get("input_end_date")
 ts_column = dbutils.widgets.get("timestamp_column")
 features_module = dbutils.widgets.get("features_transform_module")
 pk_columns = dbutils.widgets.get("primary_keys")
-pickup_features_table = dbutils.widgets.get("pickup_features_table")
-dropoff_features_table = dbutils.widgets.get("dropoff_features_table")
 publish_to_online_store = dbutils.widgets.get("publish_to_online_store")
 
 assert input_table_path != "", "input_table_path notebook parameter must be specified"
