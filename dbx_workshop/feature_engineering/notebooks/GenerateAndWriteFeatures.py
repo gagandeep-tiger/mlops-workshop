@@ -167,7 +167,7 @@ if publish_to_online_store == "true":
     ## Publish the feature table to the online store
     fe.publish_table(
         online_store=store,
-        source_table_name={output_table_name},
+        source_table_name=output_table_name,
         online_table_name=f"{output_table_name}_online"
     )
 
