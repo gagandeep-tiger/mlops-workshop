@@ -21,6 +21,16 @@
 #                            notebook) has set a task value with key "model_uri".
 ##################################################################################
 
+# COMMAND ----------
+
+# MAGIC %pip install -r ../../../requirements.txt
+
+# COMMAND ----------
+
+dbutils.library.restartPython()
+
+# COMMAND ----------
+
 # List of input args needed to run the notebook as a job.
 # Provide them via DB widgets or notebook arguments.
 #
@@ -44,8 +54,6 @@ if run_mode == "false":
     )
     dbutils.notebook.exit(0)
 
-
-
 # COMMAND ----------
 
 # DBTITLE 1,Define input and output variables
@@ -59,14 +67,6 @@ alias = "champion"
 model_uri = f"models:/{model_name}@{alias}"
 catalog_name, schema_name, served_model_name = model_name.split('.')
 inferance_log_table = f"{endpoint_name}_inference_log"
-
-# COMMAND ----------
-
-# MAGIC %pip install -r ../../../requirements.txt
-
-# COMMAND ----------
-
-dbutils.library.restartPython()
 
 # COMMAND ----------
 import os
