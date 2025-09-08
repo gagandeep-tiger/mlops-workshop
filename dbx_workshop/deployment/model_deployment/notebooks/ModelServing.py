@@ -59,16 +59,6 @@ alias = "champion"
 model_uri = f"models:/{model_name}@{alias}"
 catalog_name, schema_name, served_model_name = model_name.split('.')
 inferance_log_table = f"{endpoint_name}_inference_log"
-# COMMAND ----------
-
-import os
-import sys
-from mlflow.deployments import get_deploy_client
-from mlflow import MlflowClient
-
-
-notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
-%cd $notebook_path
 
 # COMMAND ----------
 
@@ -79,7 +69,13 @@ notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.ge
 dbutils.library.restartPython()
 
 # COMMAND ----------
+import os
+import sys
+from mlflow.deployments import get_deploy_client
+from mlflow import MlflowClient
 
+notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
+%cd $notebook_path
 %cd ..
 sys.path.append("../..")
 
