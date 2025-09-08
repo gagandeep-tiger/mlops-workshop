@@ -38,6 +38,7 @@ targets:
       host: https://adb-369999907898622.2.azuredatabricks.net
 
   staging:
+    mode: development
     variables:
       catalog_name: staging
     workspace:
