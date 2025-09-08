@@ -9,3 +9,4 @@ pyspark
 pytz
 pytest
 databricks-feature-engineering
+pyarrow>=16.0.0
