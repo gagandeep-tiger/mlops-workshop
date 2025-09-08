@@ -36,8 +36,6 @@ def test_dropoff_features_fn(spark):
             "fare_amount": [100],
         }
     )
-    spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
-
     spark_df = spark.createDataFrame(input_df)
     output_df = compute_features_fn(
         spark_df, "tpep_pickup_datetime", datetime(2022, 1, 1), datetime(2022, 1, 15)

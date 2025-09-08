@@ -8,3 +8,4 @@ Jinja2
 pyspark
 pytz
 pytest
+databricks-feature-engineering
