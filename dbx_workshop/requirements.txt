@@ -2,9 +2,9 @@ mlflow
 numpy
 pandas
 scikit-learn
-matplotlib>=3.5.2
-pillow>=10.0.1
-Jinja2==3.0.3
-pyspark~=3.3.0
-pytz~=2022.2.1
-pytest>=7.1.2
+matplotlib
+pillow
+Jinja2
+pyspark
+pytz
+pytest
