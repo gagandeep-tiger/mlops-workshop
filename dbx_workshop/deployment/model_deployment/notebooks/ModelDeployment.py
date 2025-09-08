@@ -29,14 +29,6 @@ dbutils.widgets.dropdown("env", "None", ["None", "staging", "prod"], "Environmen
 
 # COMMAND ----------
 
-import os
-import sys
-notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
-
-%cd $notebook_path
-
-# COMMAND ----------
-
 # MAGIC %pip install -r ../../../requirements.txt
 
 # COMMAND ----------
@@ -45,9 +37,16 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
+import os
+import sys
+notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
+
+%cd $notebook_path
 %cd ..
 sys.path.append("../..")
 
+
+# COMMAND ----------
 
 from deploy import deploy
 
