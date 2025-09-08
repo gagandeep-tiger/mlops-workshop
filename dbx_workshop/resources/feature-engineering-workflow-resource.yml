@@ -40,6 +40,8 @@ resources:
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
         - task_key: DropoffFeatures
           job_cluster_key: write_feature_table_job_cluster
+          depends_on:
+            - task_key: PickupFeatures          
           notebook_task:
             notebook_path: ../feature_engineering/notebooks/GenerateAndWriteFeatures.py
             base_parameters:
@@ -60,7 +62,6 @@ resources:
           job_cluster_key: write_feature_table_job_cluster
           depends_on:
             - task_key: DropoffFeatures
-            - task_key: PickupFeatures
           notebook_task:
             notebook_path: ../feature_engineering/notebooks/GenerateAndWriteFeatures.py
             base_parameters:
