@@ -43,6 +43,7 @@ targets:
     workspace:
       host: https://adb-3605952270900347.7.azuredatabricks.net
     bundle:
+      name: "bundle-staging"
       deployment:
         lock:
           enabled: false
