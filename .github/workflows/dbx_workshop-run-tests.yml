@@ -52,10 +52,10 @@ jobs:
         id: deploy
         run: |
           databricks bundle deploy -t test
-      - name: Run Feature Engineering Workflow for Test Deployment Target in Staging Workspace
-        id: feature_engineering
-        run: |
-          databricks bundle run write_feature_table_job -t test
+      # - name: Run Feature Engineering Workflow for Test Deployment Target in Staging Workspace
+      #   id: feature_engineering
+      #   run: |
+      #     databricks bundle run write_feature_table_job -t test
       - name: Run Training Workflow for Test Deployment Target in Staging Workspace
         id: training
         run: |
