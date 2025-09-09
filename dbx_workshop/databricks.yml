@@ -38,10 +38,17 @@ targets:
       host: https://adb-369999907898622.2.azuredatabricks.net
 
   staging:
+    mode: development
     variables:
       catalog_name: staging
     workspace:
       host: https://adb-3605952270900347.7.azuredatabricks.net
+    bundle:
+      name: "bundle-staging"
+      deployment:
+        lock:
+          enabled: false
+          force: true
 
   prod:
     variables:

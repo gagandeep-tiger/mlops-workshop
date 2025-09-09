@@ -1,7 +1,7 @@
 new_cluster: &new_cluster
   new_cluster:
-    num_workers: 3
-    spark_version: 15.3.x-cpu-ml-scala2.12
+    num_workers: 1
+    spark_version: 16.4.x-cpu-ml-scala2.12
     node_type_id: Standard_D3_v2
     data_security_mode: "SINGLE_USER"
     custom_tags:
@@ -32,6 +32,7 @@ resources:
               model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
               pickup_features_table: ${var.catalog_name}.dbx_workshop.trip_pickup_features
               dropoff_features_table: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
+              localtrip_features_table: ${var.catalog_name}.dbx_workshop.trip_localtrip_features
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
         - task_key: ModelValidation
@@ -54,7 +55,7 @@ resources:
               # Whether to load the current registered "Production" stage model as baseline.
               # Baseline model is a requirement for relative change and absolute change validation thresholds.
               # TODO: update enable_baseline_comparison
-              enable_baseline_comparison: "false"
+              enable_baseline_comparison: "true"
               # Please refer to data parameter in mlflow.evaluate documentation https://mlflow.org/docs/latest/python_api/mlflow.html#mlflow.evaluate
               # TODO: update validation_input
               validation_input: SELECT * FROM delta.`dbfs:/databricks-datasets/nyctaxi-with-zipcodes/subsampled`
@@ -87,6 +88,22 @@ resources:
               env: ${bundle.target}
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+        - task_key: ModelServing
+          job_cluster_key: model_training_job_cluster
+          depends_on:
+            - task_key: ModelDeployment
+          notebook_task:
+            notebook_path: ../deployment/model_deployment/notebooks/ModelServing.py
+            base_parameters:
+              env: ${bundle.target}
+              serve_model: "true"
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+              endpoint_name: predictions
+              model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
+              workload_size: Small
+              workload_type: CPU
+              scale_to_zero_enabled: "true"
       schedule:
         quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
         timezone_id: UTC

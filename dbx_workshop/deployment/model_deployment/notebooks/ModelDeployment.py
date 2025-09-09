@@ -21,6 +21,17 @@
 #                            notebook) has set a task value with key "model_uri".
 ##################################################################################
 
+# COMMAND ----------
+
+# MAGIC %pip install -r ../../../requirements.txt
+
+# COMMAND ----------
+
+dbutils.library.restartPython()
+
+# COMMAND ----------
+
+
 # List of input args needed to run the notebook as a job.
 # Provide them via DB widgets or notebook arguments.
 #
@@ -32,9 +43,11 @@ dbutils.widgets.dropdown("env", "None", ["None", "staging", "prod"], "Environmen
 import os
 import sys
 notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
+
 %cd $notebook_path
 %cd ..
 sys.path.append("../..")
+
 
 # COMMAND ----------
 
