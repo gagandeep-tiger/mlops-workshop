@@ -21,6 +21,18 @@ resources:
           <<: *new_cluster
       tasks:
         # TODO: Create a task for training the model
+        - task_key: Train
+          job_cluster_key: model_training_job_cluster
+          notebook_task:
+            notebook_path: ../training/notebooks/TrainWithFeatureStore.py
+            base_parameters:
+              env: staging
+              training_data_path: /databricks-datasets/nyctaxi-with-zipcodes/subsampled
+              experiment_name: ${var.experiment_name}
+              model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
+              pickup_features_table: ${var.catalog_name}.dbx_workshop.trip_pickup_features
+              dropoff_features_table: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
         - task_key: ModelValidation
           job_cluster_key: model_training_job_cluster
           notebook_task:
@@ -63,6 +75,15 @@ resources:
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
         # TODO: Create a task for deploying the model
+        - task_key: ModelDeployment
+          job_cluster_key: model_training_job_cluster
+          depends_on:
+            - task_key: ModelValidation
+          notebook_task:
+            notebook_path: ../deployment/model_deployment/notebooks/ModelDeployment.py
+            base_parameters:
+              env: ${bundle.target}
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
       schedule:
         quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
         timezone_id: UTC
