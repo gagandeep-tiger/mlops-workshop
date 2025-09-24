@@ -27,18 +27,20 @@ resources:
             notebook_path: ../training/notebooks/TrainWithFeatureStore.ipynb
             base_parameters:
               # Name of the current environment
-              env : "None"
+              env : ${bundle.target}
               # Path to the Hive-registered Delta table containing the training data.
               training_data_path : "/databricks-datasets/nyctaxi-with-zipcodes/subsampled"
               # MLflow experiment name.
               experiment_name : ${var.experiment_name}
               # Unity Catalog registered model name to use for the trained mode.
-              model_name : ${var.model_name}
+              model_name : ${var.catalog_name}.dbx_workshop.${var.model_name}
               # Pickup features table name
-              pickup_features_table : "dev.dbx_workshop.trip_pickup_features"
+              pickup_features_table : ${var.catalog_name}.dbx_workshop.trip_pickup_features
               # Dropoff features table name
-              dropoff_features_table : "dev.dbx_workshop.trip_dropoff_features"
-              
+              dropoff_features_table : ${var.catalog_name}.dbx_workshop.trip_dropoff_features
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+
 
         - task_key: ModelValidation
           job_cluster_key: model_training_job_cluster
@@ -85,11 +87,16 @@ resources:
         # TODO: Create a task for deploying the model
         - task_key: ModelDeployment
           job_cluster_key: model_training_job_cluster
+          depends_on:
+            - task_key: ModelValidation
           notebook_task:
             notebook_path: ../deployment/model_deployment/ModelDeployment.ipynb
             base_parameters:
               # Name of the current environment
-              env : "None"
+              env : ${bundle.target}
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+        
               
       schedule:
         quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
