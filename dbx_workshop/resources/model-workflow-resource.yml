@@ -90,7 +90,7 @@ resources:
           depends_on:
             - task_key: ModelValidation
           notebook_task:
-            notebook_path: ../deployment/model_deployment/ModelDeployment.ipynb
+            notebook_path: ../deployment/model_deployment/ModelDeployment.py
             base_parameters:
               # Name of the current environment
               env : ${bundle.target}
