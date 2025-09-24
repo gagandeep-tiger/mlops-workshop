@@ -24,7 +24,7 @@ resources:
         - task_key: Train
           job_cluster_key: model_training_job_cluster
           notebook_task:
-            notebook_path: ../training/notebooks/TrainWithFeatureStore.ipynb
+            notebook_path: ../training/notebooks/TrainWithFeatureStore.py
             base_parameters:
               # Name of the current environment
               env : ${bundle.target}
