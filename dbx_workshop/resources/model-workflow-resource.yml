@@ -26,16 +26,19 @@ resources:
           notebook_task:
             notebook_path: ../training/notebooks/TrainWithFeatureStore.ipynb
             base_parameters:
-              training_data_path : "/databricks-datasets/nyctaxi-with-zipcodes/subsampled"
+              # Name of the current environment
+              env : "None"
               # Path to the Hive-registered Delta table containing the training data.
-              experiment_name : ${var.experiment_name}
+              training_data_path : "/databricks-datasets/nyctaxi-with-zipcodes/subsampled"
               # MLflow experiment name.
-              model_name : ${var.model_name}
+              experiment_name : ${var.experiment_name}
               # Unity Catalog registered model name to use for the trained mode.
-              pickup_features_table : "dev.dbx_workshop.trip_pickup_features"
+              model_name : ${var.model_name}
               # Pickup features table name
-              dropoff_features_table : "dev.dbx_workshop.trip_dropoff_features"
+              pickup_features_table : "dev.dbx_workshop.trip_pickup_features"
               # Dropoff features table name
+              dropoff_features_table : "dev.dbx_workshop.trip_dropoff_features"
+              
 
         - task_key: ModelValidation
           job_cluster_key: model_training_job_cluster
@@ -78,7 +81,16 @@ resources:
               evaluator_config_loader_function: evaluator_config
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+        
         # TODO: Create a task for deploying the model
+        - task_key: ModelDeployment
+          job_cluster_key: model_training_job_cluster
+          notebook_task:
+            notebook_path: ../deployment/model_deployment/ModelDeployment.ipynb
+            base_parameters:
+              # Name of the current environment
+              env : "None"
+              
       schedule:
         quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
         timezone_id: UTC
