@@ -20,15 +20,20 @@ resources:
         - job_cluster_key: model_training_job_cluster
           <<: *new_cluster
       tasks:
-        # Task for training the model
+        # Model training
         - task_key: Train
           job_cluster_key: model_training_job_cluster
           notebook_task:
             notebook_path: ../training/notebooks/TrainWithFeatureStore.py
             base_parameters:
-              training_data_path: ${var.training_data_path}
+              env: ${bundle.target}
+              training_data_path: /databricks-datasets/nyctaxi-with-zipcodes/subsampled
               experiment_name: ${var.experiment_name}
-              model_name: ${var.model_name}
+              model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
+              pickup_features_table: ${var.catalog_name}.dbx_workshop.trip_pickup_features
+              dropoff_features_table: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
          # Model Validation     
         - task_key: ModelValidation
           job_cluster_key: model_training_job_cluster
@@ -71,13 +76,17 @@ resources:
               evaluator_config_loader_function: evaluator_config
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
-        # Deploying the model
+        # Model deployment
         - task_key: ModelDeployment
           job_cluster_key: model_training_job_cluster
+          depends on:
+            - task_key: ModelValidation
           notebook_task:
             notebook_path: ../deployment/model_deployment/notebooks/ModelDeployment.py
             base_parameters:
-              model_uri: "{{tasks.Train.values.model_uri}}"
+              env: ${bundle.target}
+              # git source info
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
       schedule:
         quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
         timezone_id: UTC
