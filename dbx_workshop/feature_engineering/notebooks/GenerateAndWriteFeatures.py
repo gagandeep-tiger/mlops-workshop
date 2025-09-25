@@ -143,34 +143,6 @@ fe.write_table(
     df=features_df,
     mode="merge",
 )
-# COMMAND ----------
-# DBTITLE 1, Publish Features to Online Feature Store
-# Create Online Feature Store
-# Get information about an existing online store
-if publish_to_online_store == "true":
-    store = fe.get_online_store(name=online_store_name)
-    if store:
-        print(f"Store: {store.name}, State: {store.state}, Capacity: {store.capacity}")
-    else:
-        print("No store found, creating a new one")
-        fe = FeatureEngineeringClient()
-        fe.create_online_store(
-            name=online_store_name,
-            capacity="CU_1"
-        )
-
-    # Publish Offline Feature Store to Online Feature store
-    ## Enable CDF if not already enabled
-    spark.sql(f"ALTER TABLE {output_table_name} SET TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true')")
-
-
-    ## Publish the feature table to the online store
-    fe.publish_table(
-        online_store=store,
-        source_table_name=output_table_name,
-        online_table_name=f"{output_table_name}_online"
-    )
-
 
 # COMMAND ----------
 
