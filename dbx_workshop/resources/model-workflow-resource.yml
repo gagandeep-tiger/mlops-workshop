@@ -1,7 +1,7 @@
 new_cluster: &new_cluster
   new_cluster:
     num_workers: 1
-    spark_version: 15.3.x-cpu-ml-scala2.12
+    spark_version: 16.4.x-cpu-ml-scala2.12
     node_type_id: Standard_D3_v2
     data_security_mode: "SINGLE_USER"
     custom_tags:
@@ -88,6 +88,22 @@ resources:
               env: ${bundle.target}
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+        - task_key: ModelServing
+          job_cluster_key: model_training_job_cluster
+          depends_on:
+            - task_key: ModelDeployment
+          notebook_task:
+            notebook_path: ../deployment/model_deployment/notebooks/ModelServing.py
+            base_parameters:
+              env: ${bundle.target}
+              serve_model: "true"
+              # git source information of current ML resource deployment. It will be persisted as part of the workflow run
+              git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
+              endpoint_name: predictions
+              model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
+              workload_size: Small
+              workload_type: CPU
+              scale_to_zero_enabled: "true"
       schedule:
         quartz_cron_expression: "0 0 9 * * ?" # daily at 9am
         timezone_id: UTC

@@ -137,7 +137,7 @@ assert model_version != "", "model_version notebook parameter must be specified"
 enable_baseline_comparison = dbutils.widgets.get("enable_baseline_comparison")
 
 
-enable_baseline_comparison = "false" 
+# enable_baseline_comparison = "false" 
 print(
     "Currently baseline model comparison is not supported for models registered with feature store. Please refer to "
     "issue https://github.com/databricks/mlops-stacks/issues/70 for more details."

@@ -1,7 +1,7 @@
 new_cluster: &new_cluster
   new_cluster:
     num_workers: 1
-    spark_version: 15.3.x-cpu-ml-scala2.12
+    spark_version: 16.4.x-cpu-ml-scala2.12
     node_type_id: Standard_D3_v2
     data_security_mode: "SINGLE_USER"
     custom_tags:
@@ -32,12 +32,16 @@ resources:
               input_end_date: ""
               timestamp_column: tpep_pickup_datetime
               output_table_name: ${var.catalog_name}.dbx_workshop.trip_pickup_features
+              online_store_name: ${var.catalog_name}-online-store
+              publish_to_online_store: "true"
               features_transform_module: pickup_features
               primary_keys: zip
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
         - task_key: DropoffFeatures
           job_cluster_key: write_feature_table_job_cluster
+          depends_on:
+            - task_key: PickupFeatures          
           notebook_task:
             notebook_path: ../feature_engineering/notebooks/GenerateAndWriteFeatures.py
             base_parameters:
@@ -48,6 +52,8 @@ resources:
               input_end_date: ""
               timestamp_column: tpep_dropoff_datetime
               output_table_name: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
+              online_store_name: ${var.catalog_name}-online-store
+              publish_to_online_store: "true"
               features_transform_module: dropoff_features
               primary_keys: zip
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
@@ -56,12 +62,9 @@ resources:
           job_cluster_key: write_feature_table_job_cluster
           depends_on:
             - task_key: DropoffFeatures
-            - task_key: PickupFeatures
           notebook_task:
             notebook_path: ../feature_engineering/notebooks/GenerateAndWriteFeatures.py
             base_parameters:
-              pickup_features_table: ${var.catalog_name}.dbx_workshop.trip_pickup_features
-              dropoff_features_table: ${var.catalog_name}.dbx_workshop.trip_dropoff_features
               # TODO: modify these arguments to reflect your setup.
               input_table_path: /databricks-datasets/nyctaxi-with-zipcodes/subsampled
               # TODO: Empty start/end dates will process the whole range. Update this as needed to process recent data.
@@ -69,6 +72,8 @@ resources:
               input_end_date: ""
               timestamp_column: tpep_pickup_datetime
               output_table_name: ${var.catalog_name}.dbx_workshop.trip_localtrip_features
+              online_store_name: ${var.catalog_name}-online-store
+              publish_to_online_store: "true"
               features_transform_module: localtrip_features
               primary_keys: zip
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
