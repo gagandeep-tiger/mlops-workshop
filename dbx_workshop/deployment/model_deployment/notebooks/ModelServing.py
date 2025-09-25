@@ -66,7 +66,7 @@ scale_to_zero_enabled = True if dbutils.widgets.get("scale_to_zero_enabled") == 
 alias = "champion"
 model_uri = f"models:/{model_name}@{alias}"
 catalog_name, schema_name, served_model_name = model_name.split('.')
-inferance_log_table = f"{endpoint_name}_{model_name}_inference_log"
+inferance_log_table = f"{endpoint_name}_model_inference_log"
 
 # COMMAND ----------
 import os
