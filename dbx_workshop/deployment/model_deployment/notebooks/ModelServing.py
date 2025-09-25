@@ -90,9 +90,9 @@ endpoint = deploy_client.create_endpoint(
     config={
         "served_entities": [
             {
-                "entity_name": model_name,
+                "entity_name": #TODO <ADD-Model-Name>,
                 "entity_version": model_version,
-                "workload_size": workload_size,
+                "workload_size": #TODO <add workload-size>,
                 "workload_type" : workload_type,
                 "scale_to_zero_enabled": scale_to_zero_enabled
             }
@@ -100,8 +100,8 @@ endpoint = deploy_client.create_endpoint(
         "traffic_config": {
             "routes": [
                 {
-                    "served_model_name": served_model_name,
-                    "traffic_percentage": 100
+                    "served_model_name": #TODO <Add served model name>,
+                    "traffic_percentage": #TODO <Add traffic percentage>
                 }
             ]
         },
