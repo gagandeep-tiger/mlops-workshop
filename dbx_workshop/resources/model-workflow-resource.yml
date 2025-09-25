@@ -93,14 +93,14 @@ resources:
           depends_on:
             - task_key: ModelDeployment
           notebook_task:
-            notebook_path: ../deployment/model_deployment/notebooks/ModelServing.py
+            notebook_path: #TODO add-path
             base_parameters:
               env: ${bundle.target}
               serve_model: "true"
               # git source information of current ML resource deployment. It will be persisted as part of the workflow run
               git_source_info: url:${bundle.git.origin_url}; branch:${bundle.git.branch}; commit:${bundle.git.commit}
-              endpoint_name: predictions
-              model_name: ${var.catalog_name}.dbx_workshop.${var.model_name}
+              endpoint_name: # TODO Add endpoint name
+              model_name: # TODO Model-name
               workload_size: Small
               workload_type: CPU
               scale_to_zero_enabled: "true"
