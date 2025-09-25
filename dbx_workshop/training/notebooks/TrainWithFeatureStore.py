@@ -77,6 +77,13 @@ dbutils.widgets.text(
     label="Dropoff Features Table",
 )
 
+# Dropoff features table name
+dbutils.widgets.text(
+    "localtrip_features_table",
+    "dev.dbx_workshop.trip_localtrip_features",
+    label="Dropoff Features Table",
+)
+
 # COMMAND ----------
 
 # DBTITLE 1,Define input and output variables
@@ -171,6 +178,7 @@ import mlflow
 
 pickup_features_table = dbutils.widgets.get("pickup_features_table")
 dropoff_features_table = dbutils.widgets.get("dropoff_features_table")
+localtrip_features_table = dbutils.widgets.get("localtrip_features_table")
 
 pickup_feature_lookups = [
     FeatureLookup(
@@ -190,6 +198,15 @@ dropoff_feature_lookups = [
         feature_names=["count_trips_window_30m_dropoff_zip", "dropoff_is_weekend"],
         lookup_key=["dropoff_zip"],
         timestamp_lookup_key=["rounded_dropoff_datetime"],
+    ),
+]
+
+localtrip_feature_lookups = [
+    FeatureLookup(
+        table_name=localtrip_features_table,
+        feature_names=["local_trip"],
+        lookup_key=["pickup_zip"],
+        timestamp_lookup_key=["rounded_pickup_datetime"],
     ),
 ]
 
@@ -214,7 +231,7 @@ fe = FeatureEngineeringClient()
 # Create the training set that includes the raw input data merged with corresponding features from both feature tables
 training_set = fe.create_training_set(
     df=taxi_data, # specify the df 
-    feature_lookups=pickup_feature_lookups + dropoff_feature_lookups, 
+    feature_lookups=pickup_feature_lookups + dropoff_feature_lookups + localtrip_feature_lookups, 
     # both features need to be available; defined in GenerateAndWriteFeatures &/or feature-engineering-workflow-resource.yml
     label="fare_amount",
     exclude_columns=exclude_columns,
