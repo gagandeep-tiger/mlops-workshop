@@ -32,6 +32,20 @@ dbutils.widgets.text(
     "/databricks-datasets/nyctaxi-with-zipcodes/subsampled",
     label="Input Table Name",
 )
+# TODO: add descp
+# Pickup features table name
+dbutils.widgets.text(
+    "pickup_features_table",
+    "dev.dbx_workshop.trip_pickup_features",
+    label="Pickup Features Table",
+)
+
+# Dropoff features table name
+dbutils.widgets.text(
+    "dropoff_features_table",
+    "dev.dbx_workshop.trip_dropoff_features",
+    label="Dropoff Features Table",
+)
 # Input start date.
 dbutils.widgets.text("input_start_date", "", label="Input Start Date")
 # Input end date.
@@ -77,6 +91,8 @@ input_end_date = dbutils.widgets.get("input_end_date")
 ts_column = dbutils.widgets.get("timestamp_column")
 features_module = dbutils.widgets.get("features_transform_module")
 pk_columns = dbutils.widgets.get("primary_keys")
+pickup_features_table = dbutils.widgets.get("pickup_features_table")
+dropoff_features_table = dbutils.widgets.get("dropoff_features_table")
 
 assert input_table_path != "", "input_table_path notebook parameter must be specified"
 assert output_table_name != "", "output_table_name notebook parameter must be specified"
